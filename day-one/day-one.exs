@@ -7,24 +7,26 @@ defmodule DayOne do
     end
   end
 
-  def sum_numbers(list) do
-    hd(list) + List.last(list)
+  def helper(line) do
+    Regex.replace(~r/\D/, line, "") |> addFirstAndLast |> String.to_integer
   end
 
-  def get_numbers(list) do
-    Regex.scan(~r/\d/, list) |> List.flatten() |> Enum.map(&parse_number(&1))
-  end
-
-  def parse_number(val) do
-    case Integer.parse(val) do
-      {x, ""} -> x
-      _ -> 0
+  def addFirstAndLast(line) do
+    case String.length(line) do
+      0 -> "0"
+      _ -> adder(line, String.reverse(line))
     end
   end
 
+  def adder(first, second) do
+    String.first(first) <> String.first(second)
+  end
+
   def run do
-    # |> get_numbers |> IO.puts
-    readlines("input-3.txt") |> Enum.map(&get_numbers(&1)) |> Enum.reduce(fn x, acc -> x + acc end)
+    readlines("input.txt")
+    |> Enum.map(&helper(&1))
+    |> Enum.reduce(fn x, acc -> x + acc end)
+    |> IO.puts()
   end
 end
 
