@@ -12,7 +12,7 @@ defmodule DayTwo do
     {_, readable} = String.split_at(line, 5)
     {_id, ": " <> rest} = Integer.parse(readable)
 
-    games = String.split(rest, ";")
+    games = String.split(rest, "; ")
 
     for game <- games, split = String.split(game, ", "), reduce: %{} do
       acc ->
@@ -31,7 +31,7 @@ defmodule DayTwo do
   end
 
   def parse_game(split, acc) when is_binary(split) do
-    {number, " " <> color} = String.trim(split) |> Integer.parse()
+    {number, " " <> color} = Integer.parse(split)
     color = String.first(color) |> String.to_atom()
 
     Map.update(acc, color, number, fn val -> max(val, number) end)
@@ -42,9 +42,6 @@ defmodule DayTwo do
     |> Enum.map(&create_game(&1))
     |> Enum.reduce(0, fn bag, prod -> prod + (bag.r * bag.g * bag.b) end)
     |> IO.inspect
-    # |> Enum.sum
-
-    # |> Enum.sum
   end
 end
 
